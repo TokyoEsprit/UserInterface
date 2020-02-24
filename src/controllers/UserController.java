@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import utils.PasswordUtils;
 
 
 public class UserController {
@@ -28,9 +29,10 @@ public class UserController {
      private Statement ste;
   public void Add(User u) throws SQLException
     {
+        PasswordUtils crypt = new PasswordUtils();
         PreparedStatement pre=con.prepareStatement("INSERT INTO `test1`.`user` (`login`, `pwd`, `email`, `lastName`, `firstName`, `role`) VALUES (?,?,?,?,?,?);");
         pre.setString(1, u.getLogin());
-        pre.setString(2, /*crypt.hashPassword(*/u.getPassword()/*)*/);
+        pre.setString(2, crypt.hashPassword(u.getPassword()));
         pre.setString(3, u.getEmail());
         pre.setString(4, u.getLastname());
         pre.setString(5, u.getFirstname());

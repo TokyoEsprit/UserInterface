@@ -33,6 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import utils.ConnectionUtil;
+import utils.PasswordUtils;
 
 /**
  *
@@ -106,6 +107,7 @@ public class LoginController implements Initializable {
     }
 
     private String logIn() {
+        PasswordUtils crypt = new PasswordUtils();
         String status = "Success";
         String login = txtUsername.getText();
         String password = txtPassword.getText();
@@ -114,17 +116,23 @@ public class LoginController implements Initializable {
             status = "Error";
         } else {
             //query
-            String sql = "SELECT * FROM User Where login = ? and pwd = ?";
+            String sql = "SELECT * FROM User Where login = ?";
             try {
                 preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, login);
-                preparedStatement.setString(2, password);
                 resultSet = preparedStatement.executeQuery();
                 if (!resultSet.next()) {
                     setLblError(Color.TOMATO, "Enter Correct Email/Password");
                     status = "Error";
                 } else {
-                    setLblError(Color.GREEN, "Login Successful..Redirecting..");
+                    if(crypt.checkPassword(password, resultSet.getString("pwd")))
+                    {
+                        setLblError(Color.GREEN, "Login Successful..Redirecting..");
+                    }else{
+                        setLblError(Color.TOMATO, "Enter Correct Email/Password");
+                        status = "Error";
+                    }
+                    
                 }
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
