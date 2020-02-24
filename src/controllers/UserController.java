@@ -28,12 +28,13 @@ public class UserController {
      private Statement ste;
   public void Add(User u) throws SQLException
     {
-        PreparedStatement pre=con.prepareStatement("INSERT INTO `user` (`id`, `login`, `pwd`, `lastName`, `firstName`, `role`) VALUES (NULL, ?,?,?,?,?);");
+        PreparedStatement pre=con.prepareStatement("INSERT INTO `test1`.`user` (`login`, `pwd`, `email`, `lastName`, `firstName`, `role`) VALUES (?,?,?,?,?,?);");
         pre.setString(1, u.getLogin());
         pre.setString(2, /*crypt.hashPassword(*/u.getPassword()/*)*/);
-        pre.setString(3, u.getLastname());
-        pre.setString(4, u.getFirstname());
-        pre.setString(5, u.getRole());
+        pre.setString(3, u.getEmail());
+        pre.setString(4, u.getLastname());
+        pre.setString(5, u.getFirstname());
+        pre.setString(6, u.getRole());
 
         pre.executeUpdate();
     }
@@ -61,12 +62,12 @@ public class UserController {
     }
 
   
-    public boolean update(User u) throws SQLException {
-        String query  ="UPDATE `test1`.`user` SET `firstName`=?  WHERE login =?";
+    public boolean update(String email,String password) throws SQLException {
+        String query  ="UPDATE `test1`.`user` SET `pwd`=?  WHERE email =?";
         con.setAutoCommit(false);
         preparedStatement = con.prepareStatement(query);        
-        preparedStatement.setString(1, u.getFirstname());
-        preparedStatement.setString(2, u.getLogin());
+        preparedStatement.setString(1, password);
+        preparedStatement.setString(2, email);
         return preparedStatement.executeUpdate()==1;
         
         

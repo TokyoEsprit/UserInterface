@@ -152,6 +152,16 @@ public class LoginController implements Initializable {
             
         }
 
+    @FXML
+    private void redirectForgetPassword(MouseEvent event) throws IOException {
+        
+        if(event.getSource() == btnForgot){
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/ForgotPassword.fxml"));
+            rootPane.getChildren().setAll(pane);
+        }
+        
+    }
+
 }
 
 

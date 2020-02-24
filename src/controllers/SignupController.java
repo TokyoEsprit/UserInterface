@@ -109,12 +109,13 @@ public class SignupController implements Initializable {
             String Firstname = txtFirstname.getText();
             String Lastname = txtLastname.getText();
             String Password = txtPassword.getText();
+            String email = txtEmail.getText();
             String type = txtType.getValue();
             if(Login.isEmpty() || Password.isEmpty() || Firstname.isEmpty() || Lastname.isEmpty() || type.isEmpty()) {
                 setLblError(Color.TOMATO, "Empty credentials");
                 status = "Error";
             }else {
-            User u = new User(Login,Password,Lastname,Firstname,type);
+            User u = new User(Login,Password,email,Lastname,Firstname,type);
             UserController uc = new UserController();
             uc.Add(u);
             AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
