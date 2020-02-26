@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import utils.PasswordUtils;
 
 /**
  * FXML Controller class
@@ -49,7 +50,8 @@ public class ChangePasswordController implements Initializable {
         if(event.getSource() == btnconfirmer){
             if(txtpwd.getText().equals(txtpwd1.getText())){
                 UserController uc = new UserController();
-                uc.update(txtemail.getText(), txtpwd.getText());
+                PasswordUtils pu = new PasswordUtils();
+                uc.update(txtemail.getText(), pu.hashPassword(txtpwd.getText()));
                 AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
                 rootPane.getChildren().setAll(pane);
             }

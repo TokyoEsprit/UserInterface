@@ -27,6 +27,8 @@ import models.User;
 import utils.ConnectionUtil;
 import controllers.UserController;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
+import javafx.scene.control.PasswordField;
 
 /**
  * FXML Controller class
@@ -45,7 +47,7 @@ public class SignupController implements Initializable {
     @FXML
     private TextField txtLogin;
     @FXML
-    private TextField txtPassword;
+    private PasswordField txtPassword;
     @FXML
     private TextField txtEmail;
     @FXML
@@ -111,18 +113,33 @@ public class SignupController implements Initializable {
             String Password = txtPassword.getText();
             String email = txtEmail.getText();
             String type = txtType.getValue();
-            if(Login.isEmpty() || Password.isEmpty() || Firstname.isEmpty() || Lastname.isEmpty() || type.isEmpty()) {
+            if(Login.isEmpty() || Password.isEmpty() || email.isEmpty() || Firstname.isEmpty() || Lastname.isEmpty() || type.isEmpty()) {
                 setLblError(Color.TOMATO, "Empty credentials");
                 status = "Error";
             }else {
-            User u = new User(Login,Password,email,Lastname,Firstname,type);
-            UserController uc = new UserController();
-            uc.Add(u);
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
-            rootPane.getChildren().setAll(pane);
-            }
+                if(!validMail(email))
+                {
+                    setLblError(Color.TOMATO, "Veuillez entrer un email correcte");
+                    status = "Error";
+                    
+                }else{
+                    if(!validname(Firstname)){
+                        setLblError(Color.TOMATO, "Veuillez entrer un email correcte");
+                        status = "Error";
+                    }else{
+                        if(!validname(Lastname)){
+                            setLblError(Color.TOMATO, "Veuillez entrer un email correcte");
+                            status = "Error";
+                        }else{
+                                    User u = new User(Login,Password,email,Lastname,Firstname,type);
+                                    UserController uc = new UserController();
+                                    uc.Add(u);
+                                    AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
+                                    rootPane.getChildren().setAll(pane);}
+                         }
+                    }
+                }
         }
-        
     }
     
     private void setLblError(Color color, String text) {
@@ -130,5 +147,27 @@ public class SignupController implements Initializable {
         lblErrors.setText(text);
         System.out.println(text);
     }
+    
+    public boolean validMail(String mail) throws SQLException {
+        
+        
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                            "[a-zA-Z0-9_+&*-]+)*@" +
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                            "A-Z]{2,7}$";
+                             
+        Pattern pat = Pattern.compile(emailRegex);
+        if (mail == null)
+            return false;
+        return pat.matcher(mail).matches();
+    }
+        public boolean validname(String name) throws SQLException {
+            if (name.length()==0){return false;}
+        
+            for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (!(((c >= 'a' && c <= 'z'))||((c >= 'A' && c <= 'Z'))||(c==' '))){return false;}
+          }return true;}
+    
     
 }
